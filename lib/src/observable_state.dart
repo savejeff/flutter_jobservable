@@ -23,7 +23,7 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 			_redraw_queued = true;
 			//Future.microtask(() {
       Future.delayed(Duration(milliseconds: 50), () { // batch up some consecutive calls
-				print(">> REDRAW($_redraw_queued_count)");
+				//print(">> REDRAW($_redraw_queued_count)");
 				_redraw_queued = false;
 				_redraw_queued_count = 0;
 				redraw(); // Trigger a rebuild asynchronously
