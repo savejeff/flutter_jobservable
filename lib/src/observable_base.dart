@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'observable_state.dart';
 
+
 class ObservableObject {
 	// Keep track of all observers
 	final Set<ObservableWrapper> _observers = HashSet();
@@ -19,29 +20,94 @@ class ObservableObject {
 	// Notify all observers of a value change
 	void notifyValueChange() {
 		for (var observer in _observers) {
-			observer.update(); // Call the update method on each observer
+			observer.notify(); // Call the update method on each observer
 		}
+	}
+
+}
+
+class ObserverObject extends ObservableObject {
+
+	final Map<ObservableObject, ObservableObserverWrapper> _observed_objects_lookup = Map();
+	//final Set<ObservableObserverWrapper> _observed_objects = HashSet();
+
+	void observe(ObservableObject observed_object) {
+		final wrapper = ObservableObserverWrapper(this, observed_object);
+		_observed_objects_lookup[observed_object] = wrapper;
+		//_observed_objects.add(wrapper);
+	}
+
+	void unobserve(ObservableObject observed_object) {
+		if(_observed_objects_lookup.containsKey(observed_object)) {
+			final wrapper = _observed_objects_lookup.remove(observed_object)!;
+			//_observed_objects.remove(wrapper);
+		}
+	}
+
+	// this must be called manually when the ObserverObject is not used anymore
+	dispose() {
+		for (var observer in _observed_objects_lookup.values) {
+			observer.dispose();
+		}
+		_observed_objects_lookup.clear();
+	}
+
+	// accept notify from Observed Objects
+	notify() {
+		print(">>> notify");
+		notifyValueChange();
 	}
 }
 
+//************************************************************************************************
 
+// TODO rename to ObserveSubscription or ObserveLink or ObserveForwarder
 
 class ObservableWrapper {
-	final ObserverState _state;
+	// the Observable Object subscribed to
 	final ObservableObject _observableObject;
 
-	ObservableWrapper(this._state, this._observableObject) {
+	ObservableWrapper(this._observableObject) {
 		// Register this wrapper as an observer with the ObservableObject
 		_observableObject.addObserver(this);
 	}
 
 	// This method is called when the ObservableObject notifies observers of a change
-	void update() {
+	void notify() {
+		// implement in child like
+		//_state.scheduleRedraw(); // Delegate the update to the ObserverState's scheduleRedraw method
+	}
+
+	// called when Observing Object is destoryed
+	void dispose() {
+		// unsubscribe
+		_observableObject.removeObserver(this);
+	}
+}
+
+
+class ObservableStateWrapper extends ObservableWrapper {
+	final ObserverState _state;
+
+	ObservableStateWrapper(this._state, ObservableObject _observableObject)
+	: super(_observableObject);
+
+	@override
+	void notify() {
 		_state.scheduleRedraw(); // Delegate the update to the ObserverState's scheduleRedraw method
 	}
 
-	// Clean up to prevent memory leaks
-	void dispose() {
-		_observableObject.removeObserver(this);
+}
+
+class ObservableObserverWrapper extends ObservableWrapper {
+	final ObserverObject _state;
+
+	ObservableObserverWrapper(this._state, ObservableObject _observableObject)
+	: super(_observableObject);
+
+	@override
+	void notify() {
+		_state.notify(); // Delegate the update to the ObserverState's scheduleRedraw method
 	}
+
 }

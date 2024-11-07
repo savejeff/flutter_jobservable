@@ -39,7 +39,7 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 
 	// Observe an ObservableObject by creating an ObservableWrapper
 	ObservableWrapper observe(ObservableObject observableObject) {
-		final wrapper = ObservableWrapper(this, observableObject);
+		final wrapper = ObservableStateWrapper(this, observableObject);
 		_observers.add(wrapper);
 		return wrapper;
 	}
