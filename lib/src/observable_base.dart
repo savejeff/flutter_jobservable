@@ -2,6 +2,9 @@ import 'dart:collection';
 
 import 'observable_state.dart';
 
+import 'util_sys.dart';
+
+
 
 class ObservableObject {
 	// Keep track of all observers
@@ -27,6 +30,7 @@ class ObservableObject {
 }
 
 class ObserverObject extends ObservableObject {
+	static final _TAG = "ObserverObject";
 
 	final Map<ObservableObject, ObservableObserverWrapper> _observed_objects_lookup = Map();
 	//final Set<ObservableObserverWrapper> _observed_objects = HashSet();
@@ -54,10 +58,26 @@ class ObserverObject extends ObservableObject {
 
 	// accept notify from Observed Objects
 	notify() {
-		print(">>> notify");
+		LogV(_TAG, ">>> notify");
 		notifyValueChange();
 	}
 }
+
+
+class CallbackObserver extends ObserverObject {
+
+	final void Function() callback_on_notify;
+
+	CallbackObserver(this.callback_on_notify, ObservableObject observedobject) {
+    observe(observedobject);
+  }
+
+	@override
+	notify() {
+		callback_on_notify();
+	}
+}
+
 
 //************************************************************************************************
 
