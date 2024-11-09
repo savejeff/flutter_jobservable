@@ -78,7 +78,7 @@ class ObservableWrapper {
 		//_state.scheduleRedraw(); // Delegate the update to the ObserverState's scheduleRedraw method
 	}
 
-	// called when Observing Object is destoryed
+	// called when Observing Object is destroyed
 	void dispose() {
 		// unsubscribe
 		_observableObject.removeObserver(this);
