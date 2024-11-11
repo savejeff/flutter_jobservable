@@ -18,7 +18,8 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 
 
 
-	final Set<ObservableWrapper> _observers = HashSet();
+	//final Set<ObservableWrapper> _observers = HashSet();
+	final Map<ObservableObject, ObservableWrapper> _observers_lookup = Map();
 
 	int _redraw_queued_count = 0; // Tracks how many redraw calls are queued
   bool _redraw_queued = false; // Tracks if a redraw is already scheduled
@@ -52,16 +53,27 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 	// Observe an ObservableObject by creating an ObservableWrapper
 	ObservableWrapper observe(ObservableObject observableObject) {
 		final wrapper = ObservableStateWrapper(this, observableObject);
-		_observers.add(wrapper);
+		//_observers.add(wrapper);
+		_observers_lookup[observableObject] = wrapper;
 		return wrapper;
+	}
+
+	// Observe an ObservableObject by creating an ObservableWrapper
+	unobserve(ObservableObject observableObject) {
+		if(_observers_lookup.containsKey(observableObject)) {
+			final wrapper = _observers_lookup.remove(observableObject)!;
+			//_observed_objects.remove(wrapper);
+		}
 	}
 
 	@override
 	void dispose() {
 		// Dispose of all observers to prevent memory leaks
-		for (var observer in _observers) {
+		for (var observer in _observers_lookup.values) {
 			observer.dispose();
 		}
+		_observers_lookup.clear();
+
 		super.dispose();
 	}
 }
