@@ -1,6 +1,6 @@
 name: jobservable
 description: "A Simple UI Update Framework inspired by SwiftUI"
-version: 0.0.3
+version: 0.0.4
 homepage: https://jtec.website
 
 environment:
