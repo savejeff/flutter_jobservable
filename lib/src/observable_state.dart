@@ -39,15 +39,22 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 
 				_redraw_queued = false;
 				_redraw_queued_count = 0;
-				redraw(); // Trigger a rebuild asynchronously
+				_redraw(); // Trigger a rebuild asynchronously
 			});
 		}
 	}
 
   // triggers a redraw
-  void redraw() {
+  void _redraw() {
     _redraw_count++;
+
+    onRedraw();
+
     setState(() { });
+  }
+
+  void redraw() {
+    scheduleRedraw();
   }
 
 	// Observe an ObservableObject by creating an ObservableWrapper
@@ -76,5 +83,14 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 
 		super.dispose();
 	}
+
+
+  // ****************** Events ***************************
+
+  void onRedraw() {
+    // Called if a Redraw is triggered
+    // can be overridden to update stuff before setState() is called
+  }
+
 }
 
