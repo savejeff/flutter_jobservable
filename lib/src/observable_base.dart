@@ -27,6 +27,10 @@ class ObservableObject {
 		}
 	}
 
+  int countObservers() {
+    return _observers.length;
+  }
+
 }
 
 class ObserverObject extends ObservableObject {
