@@ -12,10 +12,12 @@ import 'util_sys.dart';
 // Subclass of State that manages observers and disposes them automatically
 abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 	String _TAG = "ObserverState";
+
+  bool was_disposed = false;
+
 	jObservable_setTag(String tag) {
 		_TAG = tag;
 	}
-
 
 
 	//final Set<ObservableWrapper> _observers = HashSet();
@@ -34,6 +36,11 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 
 			//Future.microtask(() {
       Future.delayed(Duration(milliseconds: 50), () { // batch up some consecutive calls
+
+        if(was_disposed) {
+          LogD(_TAG, "REDRAW: skipped due to disposed");
+          return;
+        }
 
 				LogD(_TAG, "REDRAW: merged=$_redraw_queued_count");
 
@@ -75,6 +82,8 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 
 	@override
 	void dispose() {
+    was_disposed = true;
+
 		// Dispose of all observers to prevent memory leaks
 		for (var observer in _observers_lookup.values) {
 			observer.dispose();
