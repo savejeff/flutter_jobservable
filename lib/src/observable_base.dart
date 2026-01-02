@@ -5,7 +5,7 @@ import 'observable_state.dart';
 import 'util_sys.dart';
 
 
-
+/*
 class ObservableObject {
 	// Keep track of all observers
 	final Set<ObservableWrapper> _observers = HashSet();
@@ -33,7 +33,40 @@ class ObservableObject {
 
 }
 
-class ObserverObject extends ObservableObject {
+ */
+
+
+mixin ObservableObject {
+	// Keep track of all observers
+	final Set<ObservableWrapper> _observers = HashSet<ObservableWrapper>();
+
+	// Register an observer
+	void addObserver(ObservableWrapper observer) {
+		_observers.add(observer);
+	}
+
+	// Remove an observer
+	void removeObserver(ObservableWrapper observer) {
+		_observers.remove(observer);
+	}
+
+	// Notify all observers of a value change
+	void notifyValueChange() {
+		for (final ObservableWrapper observer in _observers) {
+			observer.notify(); // Call the update method on each observer
+		}
+	}
+
+	int countObservers() {
+		return _observers.length;
+	}
+}
+
+class ObservableFlag with ObservableObject {
+
+}
+
+class ObserverObject with ObservableObject {
 	static final _TAG = "ObserverObject";
 
 	final Map<ObservableObject, ObservableObserverWrapper> _observed_objects_lookup = Map();

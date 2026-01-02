@@ -1,25 +1,7 @@
-import 'observable_base.dart';
-
+/*
 import 'dart:collection';
 import 'dart:math';
-
-
-class ObservableValue<T> with ObservableObject {
-	T _value;
-
-	ObservableValue(this._value);
-
-	T get value => _value;
-
-	set value(T newValue) {
-		if (_value != newValue) {
-			_value = newValue;
-			notifyValueChange(); // Only notify observers when the value actually changes
-		}
-	}
-}
-
-
+import 'observable_base.dart';
 
 class ObservableList<T> extends ListBase<T> with ObservableObject {
 	final List<T> _list;
@@ -195,3 +177,4 @@ class ObservableList<T> extends ListBase<T> with ObservableObject {
 		return List<T>.from(_list, growable: growable);
 	}
 }
+*/
