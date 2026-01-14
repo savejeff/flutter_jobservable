@@ -156,6 +156,24 @@ class ObservableStateWrapper extends ObservableWrapper {
 
 }
 
+
+// Subclass that also calls a callback on notify
+class ObservableStateWrapperWithCallback extends ObservableStateWrapper {
+	final void Function() _onNotify;
+
+	ObservableStateWrapperWithCallback(
+		ObserverState state,
+		ObservableObject observableObject,
+		this._onNotify,
+	) : super(state, observableObject);
+
+	@override
+	void notify() {
+		_onNotify();	// call the additional callback
+    super.notify();	// still schedule redraw via ObserverState
+	}
+}
+
 class ObservableObserverWrapper extends ObservableWrapper {
 	final ObserverObject _state;
 

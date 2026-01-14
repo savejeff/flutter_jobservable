@@ -67,7 +67,13 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 	// Observe an ObservableObject by creating an ObservableWrapper
 	ObservableWrapper observe(ObservableObject observableObject) {
 		final wrapper = ObservableStateWrapper(this, observableObject);
-		//_observers.add(wrapper);
+		_observers_lookup[observableObject] = wrapper;
+		return wrapper;
+	}
+
+	// Observe an ObservableObject by creating an ObservableWrapper
+	ObservableWrapper observeCallback(ObservableObject observableObject, Function() cb) {
+		final wrapper = ObservableStateWrapperWithCallback(this, observableObject, cb);
 		_observers_lookup[observableObject] = wrapper;
 		return wrapper;
 	}
