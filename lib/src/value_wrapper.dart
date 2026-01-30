@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:jobservable/src/util_sys.dart';
+
+import '../jobservable.dart';
 
 
 class ValueWrapper<T> {
+  final String _tag = "ValueWrapper";
+
 	T _value;
-	final State _state;
+	final ObserverState _state;
 
 	ValueWrapper(this._state, this._value);
 
@@ -12,14 +17,14 @@ class ValueWrapper<T> {
 	set value(T newValue) {
 		if (_value != newValue) {
 			_value = newValue;
-			_state.setState(() {}); // Directly call setState on the widget’s state
+			_state.redraw(); // Directly call setState on the widget’s state
 		}
 	}
 
 	// Optional: Additional methods that use `_state` if needed
 	void updateAndPrint(T newValue) {
 		value = newValue;
-		print("New value is $newValue in widget ${_state.widget}");
+		LogD(_tag, "New value is $newValue in widget ${_state.widget}");
 	}
 }
 
@@ -28,11 +33,13 @@ class ValueWrapper<T> {
 
 
 class ValueWrapperWidget extends StatefulWidget {
+	const ValueWrapperWidget({super.key});
+
 	@override
-	_ValueWrapperWidgetState createState() => _ValueWrapperWidgetState();
+	State<ValueWrapperWidget> createState() => _ValueWrapperWidgetState();
 }
 
-class _ValueWrapperWidgetState extends State<ValueWrapperWidget> {
+class _ValueWrapperWidgetState extends ObserverState<ValueWrapperWidget> {
 	late final ValueWrapper<int> valueWrapper;
 
 	@override

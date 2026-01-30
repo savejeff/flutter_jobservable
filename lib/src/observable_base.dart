@@ -80,7 +80,10 @@ class ObserverObject with ObservableObject {
 
 	void unobserve(ObservableObject observed_object) {
 		if(_observed_objects_lookup.containsKey(observed_object)) {
-			final wrapper = _observed_objects_lookup.remove(observed_object)!;
+      _observed_objects_lookup.remove(observed_object)!;
+
+
+			//final wrapper = _observed_objects_lookup.remove(observed_object)!;
 			//_observed_objects.remove(wrapper);
 		}
 	}

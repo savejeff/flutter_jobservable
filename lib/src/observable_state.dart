@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'dart:collection';
-
 import 'observable_base.dart';
 
-import 'opt.dart';
 import 'util_sys.dart';
 
 
@@ -38,11 +35,11 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
       Future.delayed(Duration(milliseconds: 50), () { // batch up some consecutive calls
 
         if(was_disposed) {
-          LogD(_TAG, "REDRAW: skipped due to disposed");
+          LogD(_TAG, "REDRAW[$_redraw_count]: skipped due to disposed");
           return;
         }
 
-				LogD(_TAG, "REDRAW: merged=$_redraw_queued_count");
+				LogD(_TAG, "REDRAW[$_redraw_count]: merged=$_redraw_queued_count");
 
 				_redraw_queued = false;
 				_redraw_queued_count = 0;
@@ -81,7 +78,9 @@ abstract class ObserverState<T extends StatefulWidget> extends State<T> {
 	// Observe an ObservableObject by creating an ObservableWrapper
 	unobserve(ObservableObject observableObject) {
 		if(_observers_lookup.containsKey(observableObject)) {
-			final wrapper = _observers_lookup.remove(observableObject)!;
+			_observers_lookup.remove(observableObject)!;
+
+      //final wrapper = _observers_lookup.remove(observableObject)!;
 			//_observed_objects.remove(wrapper);
 		}
 	}

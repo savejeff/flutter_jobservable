@@ -1,7 +1,7 @@
-/*
 import 'dart:collection';
 import 'dart:math';
 import 'observable_base.dart';
+
 
 class ObservableList<T> extends ListBase<T> with ObservableObject {
 	final List<T> _list;
@@ -177,4 +177,3 @@ class ObservableList<T> extends ListBase<T> with ObservableObject {
 		return List<T>.from(_list, growable: growable);
 	}
 }
-*/

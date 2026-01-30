@@ -1,3 +1,7 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Initial Commit
+
+## 0.0.5
+
+* Introduced observable list
